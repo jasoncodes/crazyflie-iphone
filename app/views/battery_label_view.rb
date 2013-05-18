@@ -10,8 +10,7 @@ class BatteryLabelView < UILabel
   end
 
   def value=(value)
-    @value = value
-    self.text = "Battery Level: #{@value ? "%.2f" % [@value]: '-.--'}"
+    self.text = "Battery Level: #{value ? "%.2f" % [value]: '-.--'}"
   end
 
   def warning=(value)
