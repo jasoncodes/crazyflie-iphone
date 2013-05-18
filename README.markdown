@@ -16,7 +16,13 @@ Install the required gems:
 bundle install
 ```
 
+Start the app:
+
+``` sh
 rake
+# or
+rake device
+```
 
 Start [crazyflie-server] or debug with a dummy server:
 
@@ -34,4 +40,4 @@ socat UDP4-RECVFROM:63251,fork stdio
 
 [jasoncodes]: https://github.com/jasoncodes
 [twe4ked]: https://github.com/twe4ked
-[crazflie-server]: https://github.com/jasoncodes/crazyflie-server
+[crazyflie-server]: https://github.com/jasoncodes/crazyflie-server
