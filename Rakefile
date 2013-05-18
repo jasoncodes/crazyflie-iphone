@@ -4,6 +4,7 @@ require 'motion/project/template/ios'
 
 require 'motion-cocoapods'
 require 'bubble-wrap/core'
+require 'bubble-wrap/reactor'
 
 config = YAML.load_file('config.yml')
 

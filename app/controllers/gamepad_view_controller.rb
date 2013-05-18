@@ -18,6 +18,12 @@ class GamepadViewController < UIViewController
     @udp_socket.bindToPort(0, error: error_ptr)
     @udp_socket.beginReceiving(error_ptr)
 
+    timer = EM.add_periodic_timer 1.0 do
+      if @last_received_data && @last_received_data < Time.now - 2
+        @battery_label.value = nil
+      end
+    end
+
     @point = Point.new
   end
 
@@ -42,6 +48,7 @@ class GamepadViewController < UIViewController
   end
 
   def udpSocket(socket, didReceiveData: data, fromAddress: address, withFilterContext: filterContext)
+    @last_received_data = Time.now
     data = BW::JSON.parse(data.to_str)
     if data['pm']
       @battery_label.value = data['pm']['vbat']
