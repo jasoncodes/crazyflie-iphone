@@ -7,14 +7,28 @@ class GamepadViewController < UIViewController
     @joystick_right = JoystickView.alloc.initWithPosition(:right, forFrame: self.view.frame)
     @joystick_right.delegate = self
     self.view.addSubview(@joystick_right)
+
+    @host = NSBundle.mainBundle.objectForInfoDictionaryKey('host')
+    @udp_socket = GCDAsyncUdpSocket.alloc.initWithDelegate(self, delegateQueue: Dispatch::Queue.main)
+
+    @point = Point.new
   end
 
   def cpJoystick(joystick, didUpdate: movement)
     case joystick
     when @joystick_left
-      p left: movement
+      @point.left_x = movement.x
+      @point.left_y = movement.y
     when @joystick_right
-      p right: movement
+      @point.right_x = movement.x
+      @point.right_y = movement.y
     end
+
+    send(@point.to_json)
+  end
+
+  def send(string)
+    data = "#{string}\n".dataUsingEncoding(NSUTF8StringEncoding)
+    @udp_socket.sendData(data, toHost: @host, port: 0xf713, withTimeout: -1, tag: 1)
   end
 end

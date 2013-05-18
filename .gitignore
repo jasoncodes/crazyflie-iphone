@@ -2,3 +2,5 @@ build/
 build-*
 *.bridgesupport
 .repl_history
+vendor/Pods
+config.yml
