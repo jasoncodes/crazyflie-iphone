@@ -22,6 +22,7 @@ class GamepadViewController < UIViewController
       if @last_received_data && @last_received_data < Time.now - 2
         @battery_label.value = nil
       end
+      send(BW::JSON.generate({:ping => Time.now.to_f}))
     end
 
     @point = Point.new
