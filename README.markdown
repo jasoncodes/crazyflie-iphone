@@ -20,7 +20,10 @@ rake
 
 Start [crazyflie-server] or debug with a dummy server:
 
-```
+``` sh
+cd ~/projects/crazflie-server
+./server.py
+# or
 socat UDP4-RECVFROM:63251,fork stdio
 ```
 
