@@ -23,4 +23,6 @@ Motion::Project::App.setup do |app|
     app.identifier = 'com.jasoncodes.crazyflie.dev'
     app.provisioning_profile = find_provisioning_profile('Xcode: Wildcard AppID')
   end
+
+  app.vendor_project 'vendor/CPJoystick', :static, :cflags => '-fobjc-arc'
 end
