@@ -1,5 +1,5 @@
 class JoystickView
-  SIZE = 100
+  SIZE = 200
   MARGIN = 40
 
   def initWithPosition(position, forFrame: frame)
