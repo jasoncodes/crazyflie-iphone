@@ -23,6 +23,7 @@ class GamepadViewController < UIViewController
 
     EM.add_periodic_timer 1.0 do
       if @last_received_data && @last_received_data < Time.now - 2
+        @battery_level = nil
         @battery_label.value = nil
         @battery_label.warning = false
       end
