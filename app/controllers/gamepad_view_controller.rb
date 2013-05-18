@@ -8,8 +8,15 @@ class GamepadViewController < UIViewController
     @joystick_right.delegate = self
     self.view.addSubview(@joystick_right)
 
+    @battery_label = BatteryLabelView.alloc.initWithFrame(CGRectMake(0, 20, self.view.frame.size.height, 20))
+    self.view.addSubview(@battery_label)
+
     @host = NSBundle.mainBundle.objectForInfoDictionaryKey('host')
-    @udp_socket = GCDAsyncUdpSocket.alloc.initWithDelegate(self, delegateQueue: Dispatch::Queue.main)
+
+    error_ptr = Pointer.new(:object)
+    @udp_socket = GCDAsyncUdpSocket.alloc.initWithDelegate(self, delegateQueue: Dispatch::Queue.main.dispatch_object)
+    @udp_socket.bindToPort(0, error: error_ptr)
+    @udp_socket.beginReceiving(error_ptr)
 
     @point = Point.new
   end
@@ -32,5 +39,12 @@ class GamepadViewController < UIViewController
   def send(string)
     data = "#{string}\n".dataUsingEncoding(NSUTF8StringEncoding)
     @udp_socket.sendData(data, toHost: @host, port: 0xf713, withTimeout: -1, tag: 1)
+  end
+
+  def udpSocket(socket, didReceiveData: data, fromAddress: address, withFilterContext: filterContext)
+    data = BW::JSON.parse(data.to_str)
+    if data['pm']
+      @battery_label.value = data['pm']['vbat']
+    end
   end
 end
