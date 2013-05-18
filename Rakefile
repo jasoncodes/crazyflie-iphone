@@ -20,6 +20,7 @@ Motion::Project::App.setup do |app|
   app.info_plist['CFBundleShortVersionString'] = '0.0.0'
 
   app.development do
+    app.identifier = 'com.jasoncodes.crazyflie.dev'
     app.provisioning_profile = find_provisioning_profile('Xcode: Wildcard AppID')
   end
 end
