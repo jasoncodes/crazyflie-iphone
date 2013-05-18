@@ -22,18 +22,26 @@ class Point
   private
 
   def yaw
-    @left_x
+    if @left_x > 0.4 || @left_x < -0.4
+      @left_x * 100
+    else
+      0
+    end
   end
 
   def thrust
-    [-@left_y * 60_000, 0].max
+    if @left_touching
+      [38_000 + (-@left_y * 20_000), 0].max
+    else
+      0
+    end
   end
 
   def roll
-    @right_x
+    @right_x * 10
   end
 
   def pitch
-    @right_y
+    -@right_y * 10
   end
 end
