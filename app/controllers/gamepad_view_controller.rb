@@ -1,14 +1,13 @@
 class GamepadViewController < UIViewController
   BATTERY_WARNING_LEVEL = 3.0
 
-  def viewDidLoad
-    @joystick_left = JoystickView.alloc.initWithPosition(:left, forFrame: self.view.frame)
-    @joystick_left.delegate = self
-    self.view.addSubview(@joystick_left)
+  def loadView
+    self.view = GamepadView.alloc.initWithFrame(UIScreen.mainScreen.applicationFrame)
+  end
 
-    @joystick_right = JoystickView.alloc.initWithPosition(:right, forFrame: self.view.frame)
-    @joystick_right.delegate = self
-    self.view.addSubview(@joystick_right)
+  def viewDidLoad
+    self.view.joystick_left.delegate = self
+    self.view.joystick_right.delegate = self
 
     @battery_label = BatteryLabelView.alloc.initWithFrame(CGRectMake(0, 20, self.view.frame.size.height, 20))
     self.view.addSubview(@battery_label)
@@ -48,11 +47,11 @@ class GamepadViewController < UIViewController
 
   def cpJoystick(joystick, didUpdate: movement, touching: isTouching)
     case joystick
-    when @joystick_left
+    when self.view.joystick_left
       @point.left_x = movement.x
       @point.left_y = movement.y
       @point.left_touching = isTouching
-    when @joystick_right
+    when self.view.joystick_right
       @point.right_x = movement.x
       @point.right_y = movement.y
       @point.right_touching = isTouching
