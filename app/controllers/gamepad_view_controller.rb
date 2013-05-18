@@ -13,10 +13,11 @@ class GamepadViewController < UIViewController
 
     @host = NSBundle.mainBundle.objectForInfoDictionaryKey('host')
 
-    error_ptr = Pointer.new(:object)
-    @udp_socket = GCDAsyncUdpSocket.alloc.initWithDelegate(self, delegateQueue: Dispatch::Queue.main.dispatch_object)
-    @udp_socket.bindToPort(0, error: error_ptr)
-    @udp_socket.beginReceiving(error_ptr)
+    connect
+
+    @foreground_observer = App.notification_center.observe UIApplicationWillEnterForegroundNotification do |notification|
+      connect
+    end
 
     timer = EM.add_periodic_timer 1.0 do
       if @last_received_data && @last_received_data < Time.now - 2
@@ -26,6 +27,13 @@ class GamepadViewController < UIViewController
     end
 
     @point = Point.new
+  end
+
+  def connect
+    error_ptr = Pointer.new(:object)
+    @udp_socket = GCDAsyncUdpSocket.alloc.initWithDelegate(self, delegateQueue: Dispatch::Queue.main.dispatch_object)
+    @udp_socket.bindToPort(0, error: error_ptr)
+    @udp_socket.beginReceiving(error_ptr)
   end
 
   def cpJoystick(joystick, didUpdate: movement, touching: isTouching)
