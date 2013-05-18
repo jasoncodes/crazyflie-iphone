@@ -21,6 +21,8 @@ end
 Motion::Project::App.setup do |app|
   app.name = 'Crazyflie'
   app.interface_orientations = [:landscape_left, :landscape_right]
+  app.icons << 'Icon@2x.png'
+  app.prerendered_icon = true
 
   app.version = '0' # build number
   app.info_plist['CFBundleShortVersionString'] = '0.0.0'
