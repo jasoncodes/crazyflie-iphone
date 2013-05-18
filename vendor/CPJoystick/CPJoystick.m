@@ -140,7 +140,7 @@
     }
     else
     {
-            [self.delegate cpJoystick:self didUpdate:moveFactor];
+            [self.delegate cpJoystick:self didUpdate:moveFactor touching:isTouching];
     }
 
     lastMoveFactor = moveFactor;

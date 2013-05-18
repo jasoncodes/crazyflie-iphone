@@ -1,5 +1,5 @@
 class Point
-  attr_writer :left_x, :left_y, :right_x, :right_y
+  attr_writer :left_x, :left_y, :left_touching, :right_x, :right_y, :right_touching
 
   def initialize
     @left_x = 0

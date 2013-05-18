@@ -14,14 +14,16 @@ class GamepadViewController < UIViewController
     @point = Point.new
   end
 
-  def cpJoystick(joystick, didUpdate: movement)
+  def cpJoystick(joystick, didUpdate: movement, touching: isTouching)
     case joystick
     when @joystick_left
       @point.left_x = movement.x
       @point.left_y = movement.y
+      @point.left_touching = isTouching
     when @joystick_right
       @point.right_x = movement.x
       @point.right_y = movement.y
+      @point.right_touching = isTouching
     end
 
     send(@point.to_json)

@@ -34,5 +34,5 @@
 
 @protocol CPJoystickDelegate <NSObject>
 @optional
--(void)cpJoystick:(CPJoystick *)aJoystick didUpdate:(CGPoint)movement;
+-(void)cpJoystick:(CPJoystick *)aJoystick didUpdate:(CGPoint)movement touching:(BOOL)isTouching;
 @end
