@@ -1,4 +1,6 @@
 class GamepadViewController < UIViewController
+  BATTERY_WARNING_LEVEL = 3.0
+
   def viewDidLoad
     @joystick_left = JoystickView.alloc.initWithPosition(:left, forFrame: self.view.frame)
     @joystick_left.delegate = self
@@ -22,8 +24,15 @@ class GamepadViewController < UIViewController
     EM.add_periodic_timer 1.0 do
       if @last_received_data && @last_received_data < Time.now - 2
         @battery_label.value = nil
+        @battery_label.warning = false
       end
       send(BW::JSON.generate({:ping => Time.now.to_f}))
+    end
+
+    EM.add_periodic_timer 3.0 do
+      if @battery_level && @battery_level < BATTERY_WARNING_LEVEL
+        AudioServicesPlayAlertSound(KSystemSoundID_Vibrate)
+      end
     end
 
     @point = Point.new
@@ -60,7 +69,9 @@ class GamepadViewController < UIViewController
     @last_received_data = Time.now
     data = BW::JSON.parse(data.to_str)
     if data['pm']
-      @battery_label.value = data['pm']['vbat']
+      @battery_level = data['pm']['vbat']
+      @battery_label.value = @battery_level
+      @battery_label.warning = @battery_level < BATTERY_WARNING_LEVEL
     end
   end
 end

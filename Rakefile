@@ -32,6 +32,8 @@ Motion::Project::App.setup do |app|
 
   app.info_plist['host'] = config['host']
 
+  app.frameworks << 'AudioToolbox'
+
   app.pods do
     pod 'CocoaAsyncSocket'
   end
