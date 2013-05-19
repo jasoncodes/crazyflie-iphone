@@ -20,6 +20,10 @@ class GamepadViewController < UIViewController
       connect
     end
 
+    App.notification_center.observe UIApplicationWillResignActiveNotification do |notification|
+      disconnect
+    end
+
     EM.add_periodic_timer 1.0 do
       if @last_received_data && @last_received_data < Time.now - 2
         @battery_level = nil
@@ -39,10 +43,18 @@ class GamepadViewController < UIViewController
   end
 
   def connect
+    disconnect
     error_ptr = Pointer.new(:object)
     @udp_socket = GCDAsyncUdpSocket.alloc.initWithDelegate(self, delegateQueue: Dispatch::Queue.main.dispatch_object)
     @udp_socket.bindToPort(0, error: error_ptr)
     @udp_socket.beginReceiving(error_ptr)
+  end
+
+  def disconnect
+    if @udp_socket
+      @udp_socket.close
+      @udp_socket = nil
+    end
   end
 
   def cpJoystick(joystick, didUpdate: movement, touching: isTouching)
@@ -62,7 +74,9 @@ class GamepadViewController < UIViewController
 
   def send(string)
     data = "#{string}\n".dataUsingEncoding(NSUTF8StringEncoding)
-    @udp_socket.sendData(data, toHost: @host, port: 0xf713, withTimeout: -1, tag: 1)
+    if @udp_socket
+      @udp_socket.sendData(data, toHost: @host, port: 0xf713, withTimeout: -1, tag: 1)
+    end
   end
 
   def udpSocket(socket, didReceiveData: data, fromAddress: address, withFilterContext: filterContext)
