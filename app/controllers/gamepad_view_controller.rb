@@ -16,7 +16,7 @@ class GamepadViewController < UIViewController
 
     connect
 
-    @foreground_observer = App.notification_center.observe UIApplicationWillEnterForegroundNotification do |notification|
+    App.notification_center.observe UIApplicationWillEnterForegroundNotification do |notification|
       connect
     end
 
