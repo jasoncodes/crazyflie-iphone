@@ -1,5 +1,7 @@
 # Crazyflie
 
+![](http://cl.ly/image/09010a201s0l/content)
+
 ## Development
 
 Download and install RubyMotion.
