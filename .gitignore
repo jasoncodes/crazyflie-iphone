@@ -4,3 +4,4 @@ build-*
 .repl_history
 vendor/Pods
 config.yml
+.dat*
